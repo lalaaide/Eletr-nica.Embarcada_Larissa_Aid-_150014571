@@ -38,6 +38,8 @@ R: Na memoria RAM, pois "i" é uma variavel usada temporariamente no codigo e de
 
 (b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
 
+Depende, se o programa for um microcontrolador que precise desse programa para executar uma determinada tarefa ele estará na memória ROM, 
+já que o programa não poderá ser perdido quando o hardware for desligado.
 
 4. Quais são as diferenças, vantagens e desvantagens das arquiteturas Harvard e Von Neumann?
 
@@ -50,9 +52,25 @@ permite acesso simultâneo das memorias. Geralmente arquitetura CISC.
 
 5. Considere a variável inteira i, armazenando o valor 0x8051ABCD. Se i é armazenada na memória a partir do endereço 0x0200, como ficam 
 este byte e os seguintes, considerando que a memória é: 
-(a) Little-endian; 
 
-R:
-(b) Big-endian.
+R: (a) Little-endian?
+	0x0200: 0xCD
+	0x0201: 0xAB
+	0x0202: 0x51
+	0x0203: 0x80
+	
+  (b) Big-endian?
+	0x0200: 0x80
+	0x0201: 0x51
+	0x0202: 0xAB
+	0x0203: 0xCD
 
 Sabendo que o processador do MSP430 tem registradores de 16 bits, como ele soma duas variáveis de 32 bits?
+
+R: Uma variavel de 32 bits é separada em dois registradores de 16 bits, assim os registradores com os bits menos significativos sao 
+armazenados (se existir um carry ele sera armazenado). Posteriomente será somado os registradores com bits mais significativos levando 
+em consideração a informação do carry armazenada na soma. Logo após juntam-se esses resultados.
+
+
+
+
