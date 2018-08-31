@@ -2,8 +2,8 @@ Dada uma variável a do tipo char (um byte), escreva os trechos de código em C 
 
 (a) Somente setar o bit menos significativo de a. 
 
-R:  Para setar um bit usamos uma mascara correspondente ao bit que queremos setar (no nosso caso como é o bit menos significativo entao 
-nossa mascara sera 00000001) e em seguida fazemos a or da mascara com a variavel a. 
+R:  Para setar um bit usamos uma mascara em nivel logico baixo e setada somente no bit que queremos setar (no nosso caso como é o bit 
+menos significativo entao nossa mascara sera 00000001) e em seguida fazemos a or da mascara com a variavel a. 
  a |= BIT0;             // a = a7a6a5a5a3a2a1a0 OR 00000001
 
 (b) Somente setar dois bits de a: o menos significativo e o segundo menos significativo. 
@@ -12,8 +12,9 @@ R: a |= BIT0 + BIT1;      // a = a7a6a5a5a3a2a1a0 OR 00000011
 
 (c) Somente zerar o terceiro bit menos significativo de a. 
 
-R:  Para limpar um bit usamos uma mascara correspondente ao bit que queremos limpar (no nosso caso como é o terceiro bit menos 
-significativo entao nossa mascara sera 11111011, OU SEJA O INVERSO DO BIT2) e em seguida fazemos a and da mascara com a variavel a. 
+R:  Para limpar um bit usamos uma mascara em nivel logico alto e zerada somente no bit que queremos limpar (no nosso caso como é o 
+terceiro bit menos significativo entao nossa mascara sera 11111011, OU SEJA O INVERSO DO BIT2) e em seguida fazemos a and da mascara 
+com a variavel a. 
  a &= ~BIT2;            // a = a7a6a5a5a3a2a1a0 AND 11111011
 
 (d) Somente zerar o terceiro e o quarto bits menos significativo de a.
@@ -22,13 +23,18 @@ R: a &= ~(BIT3 + BIT2);            // a = a7a6a5a5a3a2a1a0 AND 11110011
 
 (e) Somente inverter o bit mais significativo de a.
 
-R: Para fazer a inversao de bit usamos uma mascara 
+R: Para fazer a inversao de um bit usamos uma mascara em nivel logico baixo e setada apenas no bit em que queremos inverter, e em seguida
+fazemos a xor de a com a mascara
+
+a ^= BIT7;		   // a = a7...a2a1a0 XOR 10000000
 
 (f) Inverter o nibble mais significativo de a, e setar o nibble menos significativo de a.
 
+
 Considerando a placa Launchpad do MSP430, escreva o código em C para piscar os dois LEDs ininterruptamente.
 
-Considerando a placa Launchpad do MSP430, escreva o código em C para piscar duas vezes os dois LEDs sempre que o usuário pressionar o botão.
+Considerando a placa Launchpad do MSP430, escreva o código em C para piscar duas vezes os dois LEDs sempre que o usuário pressionar o 
+botão.
 
 Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
 
