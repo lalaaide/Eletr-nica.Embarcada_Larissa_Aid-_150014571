@@ -1,4 +1,4 @@
-Dada uma variável a do tipo char (um byte), escreva os trechos de código em C para: 
+1. Dada uma variável a do tipo char (um byte), escreva os trechos de código em C para: 
 
 (a) Somente setar o bit menos significativo de a. 
 
@@ -31,16 +31,119 @@ a ^= BIT7;		   // a = a7...a2a1a0 XOR 10000000
 (f) Inverter o nibble mais significativo de a, e setar o nibble menos significativo de a.
 
 
-Considerando a placa Launchpad do MSP430, escreva o código em C para piscar os dois LEDs ininterruptamente.
+2. Considerando a placa Launchpad do MSP430, escreva o código em C para piscar os dois LEDs ininterruptamente.
 
-Considerando a placa Launchpad do MSP430, escreva o código em C para piscar duas vezes os dois LEDs sempre que o usuário pressionar o 
-botão.
+Codigo para piscar LEDs 
 
-Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
+#include <msp430g2553.h> //biblioteca da placa
+#define LED1 BIT0  //declaraçao da constante 
+#define LED2 BIT6  //declaraçao da constante
+int main(void)
+{
+	WDTCTL = WDTPW | WDTHOLD;  // para o watchdog timer
+	P1DIR |= LED1|LED2; //configura LED1 ou LED2 como saida (ja que vai ficar piscando)
+	P1OUT |= LED1|LED2; // Leva os pinos LED1 ou LED2 para Vcc, ligando os LEDs 
+	for(;;) // loop infinito
+	{
+		
+		for (i=0;i<0xffff;i++){    
+		}
+		P1OUT ^= LED1|LED2; 
+	}
+	return 0;
+}
 
-Reescreva o código da questão 2 usando a função da questão 4.
+3. Considerando a placa Launchpad do MSP430, escreva o código em C para piscar duas vezes os dois LEDs sempre que o usuário pressionar o 
+botão. 
 
-Reescreva o código da questão 3 usando a função da questão 4.
+#include <msp430g2553.h> 
+#define LED1 BIT0  
+#define LED2 BIT6  
+#define BTN  BIT3 
+
+int main(void)
+{
+	WDTCTL = WDTPW | WDTHOLD; 
+	PIOUT = 0;
+	PIDIR = LED1 + LED2;
+	for(;;)
+	{
+	    if(PIIN & BTN == 0)
+	    {
+		PIOUT |= LED1 + LED2;
+		PIOUT  = 0;
+		PIOUT |= LED1 + LED2;
+		PIOUT  = 0;
+	    }
+	    else
+		PIOUT = 0;
+
+	}
+} 
+
+4. Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
+
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT1
+
+void pisca_led ()
+{
+    PIDIR = LED0 + LED1; 
+    PIOUT = LED0 + LED1; // Liga os LED's
+    PIOUT = 0;
+}
 
 
-)
+5. Reescreva o código da questão 2 usando a função da questão 4.
+
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT1
+
+void pisca_led() //funçao
+{
+    PIDIR = LED0 + LED1; 
+    PIOUT = LED0 + LED1; // Liga os LED's
+    PIOUT = 0;
+}
+
+
+void main (void)
+{
+	WDTCTL = WDTPW | WDTHOLD;
+	PIOUT = 0;
+	for(;;)
+	{   
+	    pisca_led()
+	}
+}
+
+6. Reescreva o código da questão 3 usando a função da questão 4.
+
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT1
+
+void pisca_led()
+{
+    PIDIR = LED0 + LED1; 
+    PIOUT = LED0 + LED1; // Liga os LED's
+    PIOUT = 0;
+}
+
+void main (void)
+{
+	WDTCTL = WDTPW | WDTHOLD;
+	PIOUT = 0;
+	PIDIR = LED1 + LED2;
+	for(;;)
+	{
+	    if(PIIN & BTN == 0)
+	    {
+		Acende_led();
+		Acende_led();
+	    }
+	    else
+		PIOUT = 0;
+
