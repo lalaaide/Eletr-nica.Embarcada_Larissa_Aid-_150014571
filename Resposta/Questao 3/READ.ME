@@ -64,19 +64,19 @@ botão.
 int main(void)
 {
 	WDTCTL = WDTPW | WDTHOLD; 
-	PIOUT = 0;
-	PIDIR = LED1 + LED2;
+	P1OUT = 0;
+	P1DIR = LED1 + LED2;
 	for(;;)
 	{
 	    if(PIIN & BTN == 0)
 	    {
-		PIOUT |= LED1 + LED2;
-		PIOUT  = 0;
-		PIOUT |= LED1 + LED2;
-		PIOUT  = 0;
+		P1OUT |= LED1 + LED2;
+		P1OUT  = 0;
+		P1OUT |= LED1 + LED2;
+		P1OUT  = 0;
 	    }
 	    else
-		PIOUT = 0;
+		P1OUT = 0;
 
 	}
 } 
@@ -89,9 +89,9 @@ int main(void)
 
 void pisca_led ()
 {
-    PIDIR = LED1 + LED2; 
-    PIOUT = LED1 + LED2; // Liga os LED's
-    PIOUT = 0;
+    P1DIR = LED1 + LED2; 
+    P1OUT = LED1 + LED2; // Liga os LED's
+    P1OUT = 0;
 }
 
 
@@ -103,16 +103,16 @@ void pisca_led ()
 
 void pisca_led() //funçao
 {
-    PIDIR = LED1 + LED2; 
-    PIOUT = LED1 + LED2; // Liga os LED's
-    PIOUT = 0;
+    P1DIR = LED1 + LED2; 
+    P1OUT = LED1 + LED2; // Liga os LED's
+    P1OUT = 0;
 }
 
 
 void main (void)
 {
 	WDTCTL = WDTPW | WDTHOLD;
-	PIOUT = 0;
+	P1OUT = 0;
 	for(;;)
 	{   
 	    pisca_led()
@@ -127,24 +127,24 @@ void main (void)
 
 void pisca_led()
 {
-    PIDIR = LED1 + LED2; 
-    PIOUT = LED1 + LED2; // Liga os LED's
-    PIOUT = 0;
+    P1DIR = LED1 + LED2; 
+    P1OUT = LED1 + LED2; // Liga os LED's
+    P1OUT = 0;
 }
 
 void main (void)
 {
 	WDTCTL = WDTPW | WDTHOLD;
-	PIOUT = 0;
-	PIDIR = LED1 + LED2;
+	P1OUT = 0;
+	P1DIR = LED1 + LED2;
 	for(;;)
 	{
-	    if(PIIN & BTN == 0)
+	    if(P1IN & BTN == 0)
 	    {
 		pisca_led();
 		pisca_led();
 	    }
 	    else
-		PIOUT = 0;
+		P1OUT = 0;
 	}	
 
