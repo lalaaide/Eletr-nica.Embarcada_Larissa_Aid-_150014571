@@ -77,8 +77,25 @@ R: mov.w R6, R13;
 
 (d) A[2] = A[1] + A[0];
 
-
+mov.w 0(R9), 4(R9);
+add.w 2(R9), 4(R9);
 
 (e) A[3] = 2*f - 4*h;
 
+rra R4;      //desloca R4 pra direita (multiplica por 2) R4 = 2*f
+rra R6;     // desloca R6 pra direita (multiplica por 2) R6 = 2*h
+rra R6;   // desloca R6 novamente pra direita (multiplica por 2) R4 = 4*h
+mov.w R4, 6(R9); //  A[3] = 2*f
+sub R6, 6(R9); //A[3] = 2*f - 4*h
+
 (f) A[3] = 2*(f - 2*h);
+
+mov.w R6, R15;  //R15 = h
+rra R15;       // desloca R6 pra direita (multiplica por 2) R15 = 2*h
+sub R4, R15;  // R15 = f - 2*h
+mov.w R15, 6(R9) // A[3] = f - 2*h 
+add 6(R9), 6(R9) 
+
+
+
+
