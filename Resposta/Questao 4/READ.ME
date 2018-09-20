@@ -84,9 +84,10 @@ add.w 2(R9), 4(R9);
 
 rra R4;      //desloca R4 pra direita (multiplica por 2) R4 = 2*f
 rra R6;     // desloca R6 pra direita (multiplica por 2) R6 = 2*h
-rra R6;   // desloca R6 novamente pra direita (multiplica por 2) R4 = 4*h
+mov.w R6, R15
+rra R15;   // desloca R6 novamente pra direita (multiplica por 2) R4 = 4*h
 mov.w R4, 6(R9); //  A[3] = 2*f
-sub R6, 6(R9); //A[3] = 2*f - 4*h
+sub R15, 6(R9); //   A[3] = 2*f - 4*h
 
 (f) A[3] = 2*(f - 2*h);
 
