@@ -1,4 +1,6 @@
-Para as questões 2 a 5, considere que as variáveis f, g, h, i e j são do tipo inteiro (16 bits na arquitetura do MSP430), e que o vetor A[] é do tipo inteiro. Estas variáveis estão armazenadas nos seguintes registradores: f: R4 g: R5 h: R6 i: R7 j: R8 A: R9 Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores temporários.
+Para as questões 2 a 5, considere que as variáveis f, g, h, i e j são do tipo inteiro (16 bits na arquitetura do MSP430), e que o vetor 
+A[] é do tipo inteiro. Estas variáveis estão armazenadas nos seguintes registradores: f: R4 g: R5 h: R6 i: R7 j: R8 A: R9 
+Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores temporários.
 
 Escreva os trechos de código assembly do MSP430 para: 
 (a) Somente setar o bit menos significativo de R5. 
@@ -13,11 +15,47 @@ Escreva os trechos de código assembly do MSP430 para:
 if(i>j) f = g+h+10;
 else f = g-h-10;
 
+cmp R7, R8          ; comparando j com i 
+jge ELSE            ; j >= i
+IF: mov.w R5,  R15  ; R15 = R5 --- R15 = g
+    add   R6,  R15  ; g+h
+    add   #10, R15  ; g+h+10
+    mov.w R15, R4   ; R4 = R15
+    ret
+ELSE: mov.w R5,  R15  ; R15 = R5 --- R15 = g
+      sub   R6,  R15  ; g-h
+      sub   #10, R15  ; g-h-10
+      mov.w R15, R4   ; R4 = R15 
+      ret
+
 "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
-while(save[i]!=k) i++;
+while(save[i] != k) i++;
+
+clr R4 ; i=0
+mov.w R10, R14  ; R14 = K
+LOOP: 
+     mov R4, R15
+     rla R15         ; R15 = 2*i
+     add R9 + R15    ; R9 = (endereço de save) + 2*i
+     cmp 0(R9), R14 
+     jeq  EXIT 
+     inc.w R4    ; i++
+     jmp LOOP
+EXIT:      
+      
 
 "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 for(i=0; i<100; i++) A[i] = i*2;
+
+clr R7 ; i=0
+mov.w  R7, R15 ; R15 = i
+LOOP: 
+     cmp #100, R4
+     jge EXIT ; i >= 100
+     rla R15 ; R15 = 2*i
+     
+      
+
 
 "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 for(i=99; i>=0; i--) A[i] = i*2;
