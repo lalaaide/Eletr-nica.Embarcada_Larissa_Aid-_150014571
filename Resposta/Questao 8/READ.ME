@@ -1,0 +1,154 @@
+Para todas as questões, utilize os LEDs e/ou os botões da placa Launchpad do MSP430.
+
+1. Escreva um código em C que pisca os LEDs ininterruptamente.
+
+R: 
+
+#include <msp430g2553.h> //biblioteca da placa
+#define LED1 BIT0  //declaraçao da constante 
+#define LED2 BIT6  //declaraçao da constante
+
+void delay(volatile unsigned int i) // funçao que define o intervalo em que os LEDS vao piscar 
+{
+    while((i--)>0);
+}
+
+
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;  // para o watchdog timer
+    P1OUT &= ~ (LED1+LED2); // Leds começam desligados
+	  P1DIR |= LED1+LED2;   // configura os Leds como saida
+	
+	while(1) //loop infinito 
+	{
+	    P1OUT ^= (LED1+LED2); // faz a xor entre os LEDS 
+	    delay(0xFFFF); //intervalo
+	}
+  
+}
+
+2. Escreva um código em C que pisca os LEDs ininterruptamente. No ciclo que pisca os LEDs, o tempo que os LEDs ficam ligados deve ser 
+duas vezes maior do que o tempo que eles ficam desligados.
+
+R:
+#include <msp430g2553.h>
+#define leds (BIT0 + BIT6)
+
+void delay (volatile unsigned int i) // funçao que define o intervalo
+{
+    while ((i--)>0); 
+}  
+
+int main ()
+{
+    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+    P1OUT &= ~leds;
+    P1DIR |= leds;
+    
+ while (1)
+ {
+  
+  P1OUT &= ~leds;
+  delay (30000); 
+  P1OUT |= leds; 
+  delay (60000);
+  
+  }
+}
+ 
+3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
+
+R: 
+
+#include <msp430g2553.h>
+#define leds (BIT0 + BIT6)
+#define BTN BIT3
+
+int main () 
+{ 
+
+    WDTCTL = WDTPW | WDTHOLD; //stop watchdog timer 
+    P1OUT &= ~leds; // leds começam desligador
+    P1DIR |= leds;  // define os leds como saida
+    P1DIR &= ~ BTN;  // define o botao como entrada
+    P1REN |= BTN;          // Tipo pull-up
+	  P1OUT |= BTN;        // Valor inicial
+    
+ while (1) 
+ {
+    if ((BTN & P1IN) == 0) 
+       P1OUT |= leds;
+	  else
+	     P1OUT &= ~ leds;
+	}   
+
+}
+    
+
+4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
+
+#include <msp4302553.h> 
+#define leds (BIT0 + BIT6)
+#define BNT BIT3
+
+void delay (volatile unsigned int i)
+{
+    while ((i--)>0); 
+}
+
+int main ()
+{
+    WDTCTL = WDTPW | WDTHOLD; //stop watchdog timer 
+    P1OUT &= ~leds; // leds começam desligador
+    P1DIR |= leds;  // define os leds como saida
+    P1DIR &= ~ BTN;  // define o botao como entrada
+    P1REN |= BTN;          // Tipo pull-up
+	  P1OUT |= BTN;        // Valor inicial
+    
+    while (1) 
+   {
+   
+    if ((BTN & P1IN) == 0) 
+    {
+       P1OUT ^= leds;
+       delay(0xFFFF)
+     } 
+	  else
+	     P1OUT &= ~ leds;
+   }
+    
+}   
+
+5. Escreva um código em C que acende os LEDs quando o botão é pressionado. Deixe o MSP430 em modo de baixo consumo, e habilite a 
+interrupção do botão. 
+
+#include <msp430.h>
+#define Leds (BIT0 + BIT6)
+#define Botao BIT3
+
+int main(void)
+{
+	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
+
+	P1OUT &= ~Leds;             // Leds começam desligados
+	P1DIR |= Leds;              // Leds são saidas
+	P1DIR &= ~Botao;             // Botao é entrada
+	P1REN |= Botao;             // Habilita pull-up
+	P1OUT |= Botao;             // Inicia em Alto
+
+	P1IE |= Botao;              // Habilita a interrupção no botão
+	P1IES |= Botao;             // Interrupção na borda de descida
+
+	_BIS_SR(GIE + LPM4_bits);
+
+}
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void)
+{
+    while((P1IN&Botao)==0){
+        P1OUT |= Leds;
+    }
+    P1OUT &= ~Leds;
+    P1IFG &= ~Botao;
+}
