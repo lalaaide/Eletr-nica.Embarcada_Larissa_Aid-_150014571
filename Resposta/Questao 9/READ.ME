@@ -1,0 +1,94 @@
+1. Escreva uma função em C que faz o debounce de botões ligados à porta P1.
+
+R:
+
+*COM ATRASO*
+
+#include <msp4302553.h> 
+#define BTN BIT3 
+
+void delay (volatile unsigned int i)
+{
+    while ((i--)>0); 
+}
+
+void debounceBTN () 
+{
+   if((P1IN & BTN) == 0)
+    {
+    	delay(100000);
+      P1OUT == P1IN; 
+    }
+    return 0;
+}
+
+int main () 
+{
+ 
+  WDTCTL = WDTPW|WDTHOLD;
+  P1DIR &= ~BTN; 
+  P1OUT |= BTN;
+  P1REN |= BTN;
+  
+  P1IE |= BTN;   // BTN como interrupçao 
+  P1ES |= BTN;  //borda de descida
+  
+  _BIS_SR(GIE);   
+}
+
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void)
+{ 
+    while ((P1IN & BTN) ==0)
+    {
+      debounce BTN; 
+    }
+       
+	}
+	return 0;
+}
+
+
+*COM CONTADOR* 
+
+#include <msp4302553.h> 
+#define BTN BIT3 
+
+int debounce ()
+{
+    volatile int Count;
+    int comp;
+
+    for (Count = 0; Count<1000; Count++);
+    {
+        if(Count == 0)
+        comp = P1IN;
+        else if (comp != P1IN)
+        {
+        comp = P1IN;
+        Count = 0;
+        }
+    }
+    return P1IN;
+}
+    
+int main(void)
+{
+
+  WDTCTL = WDTPW|WDTHOLD;
+  P1DIR &= ~BTN; 
+  P1OUT |= BTN;
+  P1REN |= BTN;
+  
+  P1IE |= BTN;   // BTN como interrupçao 
+  P1ES |= BTN;  //borda de descida
+
+    while (1)
+    {}
+}
+ 
+
+2. Escreva um código em C que lê 9 botões multiplexados por 6 pinos, e pisca os LEDs da placa Launchpad de acordo com os botões. Por
+exemplo, se o primeiro botão é pressionado, os LEDs piscam uma vez; se o segundo botão é pressionado, os LEDs piscam duas vezes; e assim 
+por diante. Se mais de um botão é pressionado, os LEDs não piscam.
+
