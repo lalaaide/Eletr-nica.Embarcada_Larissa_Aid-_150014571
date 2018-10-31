@@ -137,7 +137,7 @@ int main()
      if((P1IN&Linha_3)==0)
        pisca(7);
      
-     P1OUT |= Coluna_1;
+     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
      P1OUT &= ~Coluna_2;
      if((P1IN&Linha_1)==0)
        pisca(2);
@@ -146,7 +146,7 @@ int main()
      if((P1IN&Linha_3)==0)
        pisca(8);
      
-     P1OUT |= Coluna_2;
+     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
      P1OUT &= ~Coluna_3;
      if((P1IN&Linha_1)==0)
        pisca(3);
