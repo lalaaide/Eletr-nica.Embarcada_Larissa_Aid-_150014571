@@ -47,6 +47,63 @@ P1.4---RESISTOR--------------------------------------------
 4. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os LEDs 
 de forma que um ser humano veja todos acesos ao mesmo tempo.
 
+#include <msp430g2553.h>
+#include <msp430.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define LINHA1 BIT1
+#define LINHA2 BIT2
+#define LINHA3 BIT4
+#define BTN BIT3
+
+int main(void)
+{
+    WDTCTL = WDTPW|WDTHOLD;  //parar wdtctl--watchdog timer
+    P1DIR |= LEDS;          //DEFINE LEDS COMO SAIDAS.
+    int n;
+    
+    while(1)
+    {
+                          //LED  1
+                P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA3);                   //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA1;                      // SETA LINHA1
+                        
+                        //LED 2
+                P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA3 COMO SAIDA
+                P1DIR &= ~(LINHA2);                   //DEFINE LINHA2 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA1;                      // SETA LINHA1
+                      
+                      //LED 3
+                P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA3);                   //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA2;                      // SETA LINHA2
+
+                      //LED 4
+                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA3 COMO SAIDA
+                P1DIR &= ~(LINHA1);                   //DEFINE LINHA1 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA2;                     // SETA LINHA2
+
+                      //LED 5
+                P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA3 COMO SAIDA
+                P1DIR &= ~(LINHA2);                   //DEFINE LINHA2 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA3;                      // SETA LINHA3
+
+                       //LED 6
+                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA3 COMO SAIDA
+                P1DIR &= ~(LINHA1);                   //DEFINE LINHA1 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA3;                     // SETA LINHA3
+        }
+                return 0;
+            }
+
 5. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de forma 
 que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
 
