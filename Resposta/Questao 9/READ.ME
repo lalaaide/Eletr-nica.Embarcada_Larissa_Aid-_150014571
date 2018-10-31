@@ -17,7 +17,8 @@ void debounceBTN ()
    if((P1IN & BTN) == 0)
     {
     	delay(100000);
-      P1OUT == P1IN; 
+ 	if((P1IN & BTN) == 0)
+    		return 1;
     }
     return 0;
 }
@@ -39,14 +40,16 @@ int main ()
 #pragma vector=PORT1_VECTOR
 __interrupt void Port_1(void)
 { 
-    while ((P1IN & BTN) ==0)
+    while (1)
     {
-      debounce BTN; 
-    }
-       
-	}
+    
+    	if(RespostaDebounce() == 1)
+            P1OUT |= LEDS;
+        else
+            P1OUT &= ~LEDS;
+     }
 	return 0;
-}
+ }
 
 
 *COM CONTADOR* 
@@ -91,4 +94,68 @@ int main(void)
 2. Escreva um código em C que lê 9 botões multiplexados por 6 pinos, e pisca os LEDs da placa Launchpad de acordo com os botões. Por
 exemplo, se o primeiro botão é pressionado, os LEDs piscam uma vez; se o segundo botão é pressionado, os LEDs piscam duas vezes; e assim 
 por diante. Se mais de um botão é pressionado, os LEDs não piscam.
+
+#include <msp4302553.h>
+
+#define Linha_1 BIT4
+#define Linha_2 BIT5
+#define Linha_3 BIT6
+#define Coluna_1 BIT1
+#define Coluna_2 BIT2
+#define Coluna_3 BIT3
+
+void delay(volatile unsigned int dealy)
+{
+    while((i--)>0);
+}
+
+void Pisca (int i){
+    while(i>0){
+    P1OUT ^= BIT0;
+    atraso(100000);
+    i--;
+    }
+}
+
+int main()
+{
+  
+  WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer to prevent time out reset
+  P1OUT = 0x00;
+  P1DIR = 0xFF;
+  P1DIR  &= ~(BIT4+BIT5+BIT6);
+  P1REN |= (BIT4+BIT5+BIT6);
+  P1OUT |= (BIT4+BIT5+BIT6);
+  
+  while(1){
+     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
+     P1OUT &= ~Coluna_1
+     if((P1IN&Linha_1)==0)
+       pisca(1);
+     if((P1IN&Linha_2)==0)
+       pisca(4);
+     if((P1IN&Linha_3)==0)
+       pisca(7);
+     
+     P1OUT |= Coluna_1;
+     P1OUT &= ~Coluna_2;
+     if((P1IN&Linha_1)==0)
+       pisca(2);
+     if((P1IN&Linha_2)==0)
+       pisca(5);
+     if((P1IN&Linha_3)==0)
+       pisca(8);
+     
+     P1OUT |= Coluna_2;
+     P1OUT &= ~Coluna_3;
+     if((P1IN&Linha_1)==0)
+       pisca(3);
+     if((P1IN&Linha_2)==0)
+       pisca(6);
+     if((P1IN&Linha_3)==0)
+       pisca(9);
+  }
+  return 0;
+}
+
 
