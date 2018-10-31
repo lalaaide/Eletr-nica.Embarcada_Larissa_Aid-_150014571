@@ -112,7 +112,7 @@ void delay(volatile unsigned int dealy)
 void Pisca (int i){
     while(i>0){
     P1OUT ^= BIT0;
-    atraso(100000);
+    delay(100000);
     i--;
     }
 }
