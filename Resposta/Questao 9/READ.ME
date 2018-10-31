@@ -97,12 +97,15 @@ por diante. Se mais de um botão é pressionado, os LEDs não piscam.
 
 #include <msp4302553.h>
 
+#define leds (BIT0 + BIT6)
 #define Linha_1 BIT4
 #define Linha_2 BIT5
-#define Linha_3 BIT6
+#define Linha_3 BIT7
 #define Coluna_1 BIT1
 #define Coluna_2 BIT2
 #define Coluna_3 BIT3
+#define linhas (BIT4 + BIT5 + BIT7)
+#define colunas (BIT1 + BIT2 + BIT3)
 
 void delay(volatile unsigned int dealy)
 {
@@ -111,7 +114,7 @@ void delay(volatile unsigned int dealy)
 
 void Pisca (int i){
     while(i>0){
-    P1OUT ^= BIT0;
+    P1OUT ^= leds;
     delay(100000);
     i--;
     }
@@ -123,12 +126,13 @@ int main()
   WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer to prevent time out reset
   P1OUT = 0x00;
   P1DIR = 0xFF;
-  P1DIR  &= ~(BIT4+BIT5+BIT6);
-  P1REN |= (BIT4+BIT5+BIT6);
-  P1OUT |= (BIT4+BIT5+BIT6);
+  P1DIR  &= ~ linhas;
+  P1DIR  |= leds;
+  P1REN  &= ~ linhas;
+  P1OUT  &= ~ linhas;
   
   while(1){
-     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
+     P1OUT |= colunas;
      P1OUT &= ~Coluna_1
      if((P1IN&Linha_1)==0)
        pisca(1);
@@ -137,7 +141,7 @@ int main()
      if((P1IN&Linha_3)==0)
        pisca(7);
      
-     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
+     P1OUT |= colunas;
      P1OUT &= ~Coluna_2;
      if((P1IN&Linha_1)==0)
        pisca(2);
@@ -146,7 +150,7 @@ int main()
      if((P1IN&Linha_3)==0)
        pisca(8);
      
-     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
+     P1OUT |= colunas;
      P1OUT &= ~Coluna_3;
      if((P1IN&Linha_1)==0)
        pisca(3);
